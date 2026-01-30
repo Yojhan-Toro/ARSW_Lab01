@@ -54,14 +54,44 @@ Respuesta: En las clases planteadas intentamos solucionar este problema por medi
 A partir de lo anterior, implemente la siguiente secuencia de experimentos para realizar las validación de direcciones IP dispersas (por ejemplo 202.24.34.55), tomando los tiempos de ejecución de los mismos (asegúrese de hacerlos en la misma máquina):
 
 1. Un solo hilo.
+
+![](img/p3_0.png)
+![](img/p3_1.png)
+
+Como podemos ver en las imagenes, el porcentaje de uso de la GPU estuvo a lo largo del proceso alrededor del 0,4 % y su ejecución duró 161 segundos.
+
 2. Tantos hilos como núcleos de procesamiento (haga que el programa determine esto haciendo uso del [API Runtime](https://docs.oracle.com/javase/7/docs/api/java/lang/Runtime.html)).
+
+![](img/p3_2.png)
+![](img/p3_3.png)
+
+Como podemos ver en las imagenes, el porcentaje de uso de la GPU estuvo a lo largo del proceso alrededor del 0,6 % y su ejecución duró 10 segundos.
+
 3. Tantos hilos como el doble de núcleos de procesamiento.
+
+![](img/p3_4.png)
+
+Como podemos ver en las imagenes, el porcentaje de uso de la GPU estuvo a lo largo del proceso alrededor del 0,9 % y su ejecución duró 4 segundos.
+
 4. 50 hilos.
+
+![](img/p3_5.png)
+
+Esta prueba fue tan rápida que no nos dio tiempo a sacar la imagen del monitoreo, pero midiendo el tiempo desde el código podemos saber que la ejecución duró 2394 ms, que son alrededor de 2,4 segundos.
+
 5. 100 hilos.
+
+![](img/p3_6.png)
+
+Esta prueba fue tan rápida que no nos dio tiempo a sacar la imagen del monitoreo, pero midiendo el tiempo desde el código podemos saber que la ejecución duró 1244 ms, que son alrededor de 1.3 segundos.
 
 Al iniciar el programa ejecute el monitor jVisualVM, y a medida que corran las pruebas, revise y anote el consumo de CPU y de memoria en cada caso. ![](img/jvisualvm.png)
 
 Con lo anterior, y con los tiempos de ejecución dados, haga una gráfica de tiempo de solución vs. número de hilos. Analice y plantee hipótesis con su compañero para las siguientes preguntas (puede tener en cuenta lo reportado por jVisualVM):
+
+Al graficar los datos obtenemos:
+
+![](img/p3_7.png)
 
 **Parte IV - Ejercicio Black List Search**
 
@@ -77,4 +107,4 @@ Respuesta: Si un sistema tiene X núcleos, solo X threads pueden ejecutarse verd
 
 3. De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, la ley de Amdahls se aplicaría mejor?. Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.
 
-Respuesta: Es incierta saber si mejoraria, porque introducir mas maquinas podria hacer que surjan problemas de latencia entre la conexion de ellas y demas. Pero es verdad que al pasar a diferentes maquinas tal vez cada maquina podria tomar un segmento mas grande y asi ser mas eficiente.
+Respuesta: Es incierta saber si mejoraria, porque introducir mas maquinas podria hacer que surjan problemas de latencia entre la conexion de ellas. Pero es verdad que al pasar a diferentes maquinas tal vez cada maquina podria tomar un segmento mas grande y asi ser mas eficiente aprovechando al maximo la capacidad de cada una.
