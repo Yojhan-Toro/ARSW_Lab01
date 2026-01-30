@@ -107,4 +107,4 @@ Respuesta: Si un sistema tiene X núcleos, solo X threads pueden ejecutarse verd
 
 3. De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, la ley de Amdahls se aplicaría mejor?. Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.
 
-Respuesta: Es incierta saber si mejoraria, porque introducir mas maquinas podria hacer que surjan problemas de latencia entre la conexion de ellas y demas. Pero es verdad que al pasar a diferentes maquinas tal vez cada maquina podria tomar un segmento mas grande y asi ser mas eficiente.
+Respuesta: Es incierta saber si mejoraria, porque introducir mas maquinas podria hacer que surjan problemas de latencia entre la conexion de ellas. Pero es verdad que al pasar a diferentes maquinas tal vez cada maquina podria tomar un segmento mas grande y asi ser mas eficiente aprovechando al maximo la capacidad de cada una.
