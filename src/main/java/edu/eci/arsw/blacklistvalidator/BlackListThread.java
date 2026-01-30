@@ -14,7 +14,8 @@ public class BlackListThread extends Thread {
     private int endIndex;       
     private String ipAddress;   
     private int occurrencesCount; 
-    private List<Integer> blackListOccurrences; 
+    private List<Integer> blackListOccurrences;
+    private int checkedServersCount;
     
     private static final int BLACK_LIST_ALARM_COUNT = 5;
     
@@ -24,6 +25,7 @@ public class BlackListThread extends Thread {
         this.ipAddress = ipAddress;
         this.occurrencesCount = 0;
         this.blackListOccurrences = new LinkedList<>();
+        this.checkedServersCount = 0;
     }
     
     @Override
@@ -47,5 +49,9 @@ public class BlackListThread extends Thread {
 
     public List<Integer> getBlackListOccurrences() {
         return blackListOccurrences;
+    }
+
+    public int getCheckedServersCount() {
+        return checkedServersCount;
     }
 }

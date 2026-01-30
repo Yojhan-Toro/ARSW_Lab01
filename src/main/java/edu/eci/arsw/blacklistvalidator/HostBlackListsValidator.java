@@ -76,8 +76,15 @@ public class HostBlackListsValidator {
         } else {
             skds.reportAsTrustworthy(ipaddress);
         }
+
+        int checkedListsCount = 0;
+        for (int i = 0; i < N; i++) {
+            occurrencesCount += threads[i].getOccurrencesCount();
+            blackListOccurrences.addAll(threads[i].getBlackListOccurrences());
+            checkedListsCount += threads[i].getCheckedServersCount();
+        }
         
-        LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}", new Object[]{totalServers, totalServers});
+        LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}", new Object[]{checkedListsCount, totalServers});
         
         return blackListOccurrences;
     }
