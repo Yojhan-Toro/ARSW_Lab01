@@ -89,9 +89,62 @@ public class HostBlackListsValidator {
         return blackListOccurrences;
     }
     
+    public List<Integer> checkHostOptimized(String ipaddress, int N){
+        LinkedList<Integer> blackListOccurrences = new LinkedList<>();
+        
+        HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
+        int totalServers = skds.getRegisteredServersCount();
+        
+        java.util.concurrent.atomic.AtomicInteger sharedOccurrencesCount = new java.util.concurrent.atomic.AtomicInteger(0);
+        
+        int segmentSize = totalServers / N;
+        int remainder = totalServers % N;
+        
+        BlackListThreadOptimized[] threads = new BlackListThreadOptimized[N];
+        
+        int startIndex = 0;
+        for (int i = 0; i < N; i++) {
+            int endIndex = startIndex + segmentSize;
+            
+            if (i < remainder) {
+                endIndex++;
+            }
+            
+            threads[i] = new BlackListThreadOptimized(startIndex, endIndex, ipaddress, sharedOccurrencesCount);
+            startIndex = endIndex;
+        }
+        
+        for (int i = 0; i < N; i++) {
+            threads[i].start();
+        }
+        
+        try {
+            for (int i = 0; i < N; i++) {
+                threads[i].join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        int checkedListsCount = 0;
+        int occurrencesCount = 0;
+        for (int i = 0; i < N; i++) {
+            occurrencesCount += threads[i].getOccurrencesCount();
+            blackListOccurrences.addAll(threads[i].getBlackListOccurrences());
+            checkedListsCount += threads[i].getCheckedServersCount();
+        }
+        
+        if (occurrencesCount >= BLACK_LIST_ALARM_COUNT) {
+            skds.reportAsNotTrustworthy(ipaddress);
+        } else {
+            skds.reportAsTrustworthy(ipaddress);
+        }
+        
+        LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}", new Object[]{checkedListsCount, totalServers});
+        
+        return blackListOccurrences;
+    }
     
     private static final Logger LOG = Logger.getLogger(HostBlackListsValidator.class.getName());
-    
-    
     
 }

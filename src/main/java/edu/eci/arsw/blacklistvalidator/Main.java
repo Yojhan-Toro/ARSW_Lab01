@@ -38,6 +38,12 @@ public class Main {
         endTime = System.currentTimeMillis();
         System.out.println("The host was found in the following blacklists: " + blackListOccurrences);
         System.out.println("Time taken: " + (endTime - startTime) + " ms");
-    }
-    
+
+        System.out.println("=== 2.1 Threads optimizados ===");
+        startTime = System.currentTimeMillis();
+        blackListOccurrences = hblv.checkHostOptimized("202.24.34.55", numberOfThreads);
+        endTime = System.currentTimeMillis();
+        System.out.println("Occurrences found: " + blackListOccurrences.size());
+        System.out.println("Time taken: " + (endTime - startTime) + " ms");
+    } 
 }

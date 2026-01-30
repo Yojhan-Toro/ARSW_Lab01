@@ -3,12 +3,13 @@ package edu.eci.arsw.blacklistvalidator;
 import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 
  * @author ivanCubillos
  */
-public class BlackListThread extends Thread {
+public class BlackListThreadOptimized extends Thread {
     
     private int startIndex; 
     private int endIndex;       
@@ -16,16 +17,19 @@ public class BlackListThread extends Thread {
     private int occurrencesCount; 
     private List<Integer> blackListOccurrences;
     private int checkedServersCount;
+
+    private AtomicInteger sharedOccurrencesCount;
     
     private static final int BLACK_LIST_ALARM_COUNT = 5;
     
-    public BlackListThread(int startIndex, int endIndex, String ipAddress) {
+    public BlackListThreadOptimized(int startIndex, int endIndex, String ipAddress, AtomicInteger sharedOccurrencesCount) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.ipAddress = ipAddress;
         this.occurrencesCount = 0;
         this.blackListOccurrences = new LinkedList<>();
         this.checkedServersCount = 0;
+        this.sharedOccurrencesCount = sharedOccurrencesCount;
     }
     
     @Override
@@ -33,10 +37,18 @@ public class BlackListThread extends Thread {
         HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
         
         for (int i = startIndex; i < endIndex; i++) {
-            checkedServersCount++;
+            
+            if (sharedOccurrencesCount.get() >= BLACK_LIST_ALARM_COUNT) {
+                break;
+            }
+            
+            checkedServersCount++; 
+            
             if (skds.isInBlackListServer(i, ipAddress)) {
                 blackListOccurrences.add(i);
                 occurrencesCount++;
+                
+                sharedOccurrencesCount.incrementAndGet();
             }
         }
     }
