@@ -31,7 +31,6 @@ public class BlackListThread extends Thread {
     @Override
     public void run() {
         HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
-        
         for (int i = startIndex; i < endIndex; i++) {
             checkedServersCount++;
             if (skds.isInBlackListServer(i, ipAddress)) {

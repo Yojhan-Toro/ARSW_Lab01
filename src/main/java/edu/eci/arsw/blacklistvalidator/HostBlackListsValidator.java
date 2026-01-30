@@ -51,6 +51,7 @@ public class HostBlackListsValidator {
             }
             
             threads[i] = new BlackListThread(startIndex, endIndex, ipaddress);
+            System.out.println("Hilo " + threads[i] + " inicia en:" + String.valueOf(startIndex));
             startIndex = endIndex;
         }
         
